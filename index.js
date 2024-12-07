@@ -49,6 +49,7 @@ app.get("/posts", (req, res) => {
 app.get("/posts/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const findId = posts.find((post) => post.id === id);
+  if (!findId) return res.status(404).json({message: "Post not found"});
   res.json(findId);
 })
 
@@ -77,13 +78,13 @@ app.patch("/posts/:id", (req, res) => {
 })
 
 //CHALLENGE 5: DELETE a specific post by providing the post id.
-// app.delete("posts/:id", (req, res) => {
-//   const id = parseInt(req.params.id);
-//   const deletePost = posts.findIndex((post) => post.id === id);
-//   if (deletePost === -1) return res.status(404).json({message: `Post not found. No post were deleted`});
-//     posts.splice(deletePost, 1);
-//     res.json({message: "Post deleted"});   
-// });
+app.delete("/posts/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const deletePost = posts.findIndex((post) => post.id === id);
+  if (deletePost === -1) return res.status(404).json({message: `Post not found. No post were deleted`});
+    posts.splice(deletePost, 1);
+    res.json({message: "Post deleted"});   
+});
 
 app.listen(port, () => {
   console.log(`API is running at http://localhost:${port}`);
